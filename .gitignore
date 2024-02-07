@@ -1,4 +1,8 @@
 .DS_Store
+.settings
+.classpath
+.project
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
