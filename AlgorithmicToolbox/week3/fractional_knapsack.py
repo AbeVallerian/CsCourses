@@ -12,7 +12,7 @@ def optimal_value(capacity: int, weights: List[float], values: List[float]):
     zip_list: List = sorted(list(zip(values_per_weight, weights, values)), reverse=True)
 
     idx: int = 0
-    while capacity > 0:
+    while capacity > 0 and idx < len(values):
         if zip_list[idx][1] >= capacity:
             value += capacity * zip_list[idx][2] / zip_list[idx][1]
             capacity = 0
