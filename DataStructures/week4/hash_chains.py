@@ -11,11 +11,12 @@ class Query:
 
 
 class QueryProcessor:
-    _multiplier: int = 263
-    _prime: int = 1000000007
-
-    def __init__(self, bucket_count: int) -> None:
+    def __init__(
+        self, bucket_count: int, multiplier: int = 263, prime: int = 1000000007
+    ) -> None:
         self.bucket_count: int = bucket_count
+        self._multiplier: int = multiplier
+        self._prime: int = prime
 
         self.elems: Dict[List[int]] = {}
         for i in range(self.bucket_count):
