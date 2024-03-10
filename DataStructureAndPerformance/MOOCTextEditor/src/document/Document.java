@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 public abstract class Document {
 
 	private String text;
+	private long startTime = System.nanoTime();
+	private long totalTime;
 	
 	/** Create a new document from the given text.
 	 * Because this class is abstract, this is used only from subclasses.
@@ -149,11 +151,15 @@ public abstract class Document {
 	/** return the Flesch readability score of this document */
 	public double getFleschScore()
 	{
-	    // TODO: You will play with this method in week 1, and 
-		// then implement it in week 2
-	    return 0.0;
+		double score = 206.835 - 1.015 * getNumWords() / getNumSentences()
+				- 84.6 * getNumSyllables() / getNumWords();
+		totalTime = System.nanoTime() - startTime;
+		return score;
 	}
 	
+	public double getTotalTime() {
+		return 1.0*totalTime/1000000000;
+	}
 	
 	
 }
