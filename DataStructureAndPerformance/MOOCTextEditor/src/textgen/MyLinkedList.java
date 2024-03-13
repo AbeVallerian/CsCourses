@@ -16,16 +16,32 @@ public class MyLinkedList<E> extends AbstractList<E> {
 
 	/** Create a new empty LinkedList */
 	public MyLinkedList() {
-		// TODO: Implement this method
+		head = null;
+		tail = null;
+		size = 0;
 	}
 
 	/**
 	 * Appends an element to the end of the list
 	 * @param element The element to add
 	 */
-	public boolean add(E element ) 
+	public boolean add(E element) 
 	{
-		// TODO: Implement this method
+		if (element == null) {
+			throw new NullPointerException("element cannot be null");
+		}
+		
+		LLNode<E> newNode = new LLNode<E>(element);
+		if (size == 0) {
+			head = newNode;
+			tail = newNode;
+		} else {
+			newNode.prev = tail;
+			newNode.next = null;
+			tail.next = newNode;
+			tail = newNode;
+		}
+		size += 1;
 		return false;
 	}
 
@@ -33,26 +49,64 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 * @throws IndexOutOfBoundsException if the index is out of bounds. */
 	public E get(int index) 
 	{
-		// TODO: Implement this method.
-		return null;
+		if (index >= size) {
+			throw new IndexOutOfBoundsException("index is larger or equal than list size");
+		}
+		if (index < 0) {
+			throw new IndexOutOfBoundsException("index cannot be negative");
+		}
+		LLNode<E> currNode = head;
+		for(int i=index; i > 0; i--) {
+			currNode = currNode.next;
+		}
+		return currNode.data;
 	}
-
+	
 	/**
 	 * Add an element to the list at the specified index
 	 * @param The index where the element should be added
 	 * @param element The element to add
 	 */
-	public void add(int index, E element ) 
+	public void add(int index, E element) 
 	{
-		// TODO: Implement this method
+		if (element == null) {
+			throw new NullPointerException("element cannot be null");
+		}
+		
+		if (index > size) {
+			throw new IndexOutOfBoundsException("index is larger than list size");
+		}
+		if (index < 0) {
+			throw new IndexOutOfBoundsException("index cannot be negative");
+		}
+		
+		if(index == size) {
+			add(element);
+		} else {
+			LLNode<E> currNode = head;
+			for(int i=index; i > 0; i--) {
+				currNode = currNode.next;
+			}
+			
+			LLNode<E> newNode = new LLNode<E>(element);
+			newNode.prev = currNode.prev;
+			newNode.next = currNode;
+			if (newNode.prev != null) {
+				newNode.prev.next = newNode;
+			} else {
+				head = newNode;
+			}
+			newNode.next.prev = newNode;
+			
+			size += 1;
+		}
 	}
 
 
 	/** Return the size of the list */
 	public int size() 
 	{
-		// TODO: Implement this method
-		return -1;
+		return size;
 	}
 
 	/** Remove a node at the specified index and return its data element.
@@ -62,9 +116,38 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 * 
 	 */
 	public E remove(int index) 
-	{
-		// TODO: Implement this method
-		return null;
+	{		
+		if (index >= size) {
+			throw new IndexOutOfBoundsException("index is larger than list size");
+		}
+		if (index < 0) {
+			throw new IndexOutOfBoundsException("index cannot be negative");
+		}
+		
+		LLNode<E> currNode = head;
+		for(int i=index; i > 0; i--) {
+			currNode = currNode.next;
+		}
+		
+		E currData = currNode.data;
+		
+		if (currNode.prev == null) {
+			head = currNode.next;
+		} else {
+			currNode.prev.next = currNode.next;
+		}
+		if (currNode.next == null) {
+			tail = currNode.prev;
+		} else {
+			currNode.next.prev = currNode.prev;
+		}
+		
+		currNode.prev = null;
+		currNode.next = null;
+		
+		size -= 1;
+		
+		return currData;
 	}
 
 	/**
@@ -76,8 +159,26 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public E set(int index, E element) 
 	{
-		// TODO: Implement this method
-		return null;
+		if (element == null) {
+			throw new NullPointerException("element cannot be null");
+		}
+		
+		if (index >= size) {
+			throw new IndexOutOfBoundsException("index is larger or equal than list size");
+		}
+		if (index < 0) {
+			throw new IndexOutOfBoundsException("index cannot be negative");
+		}
+		
+		LLNode<E> currNode = head;
+		for(int i=index; i > 0; i--) {
+			currNode = currNode.next;
+		}
+		
+		E oldData = currNode.data;
+		currNode.data = element;
+		
+		return oldData;
 	}   
 }
 
@@ -86,9 +187,6 @@ class LLNode<E>
 	LLNode<E> prev;
 	LLNode<E> next;
 	E data;
-
-	// TODO: Add any other methods you think are useful here
-	// E.g. you might want to add another constructor
 
 	public LLNode(E e) 
 	{
