@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Queue;
 
 /** 
  * An trie data structure that implements the Dictionary and the AutoComplete ADT
@@ -20,6 +21,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     public AutoCompleteDictionaryTrie()
 	{
 		root = new TrieNode();
+		size = 0;
 	}
 	
 	
@@ -39,8 +41,34 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 */
 	public boolean addWord(String word)
 	{
-	    //TODO: Implement this method.
-	    return false;
+		TrieNode curr = root;
+		boolean isExist = false;
+		TrieNode child;
+		for(char c: word.toLowerCase().toCharArray()) {
+			child = curr.getChild(c);
+			if (child == null) {
+				curr.insert(c);
+				curr = curr.getChild(c);
+			} else if (child.getText().equals(word.toLowerCase())) {
+				if (child.endsWord()) {
+					isExist = true;
+					break;
+				} else {
+					curr = child;
+					break;
+				}
+			} else {
+				curr = child;
+			}
+		}
+		
+		if (isExist) {
+			return false;
+		} else {
+			curr.setEndsWord(true);
+			size += 1;
+			return true;
+		}
 	}
 	
 	/** 
@@ -49,8 +77,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 */
 	public int size()
 	{
-	    //TODO: Implement this method
-	    return 0;
+	    return size;
 	}
 	
 	
@@ -59,7 +86,18 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	@Override
 	public boolean isWord(String s) 
 	{
-	    // TODO: Implement this method
+		TrieNode curr = root;
+		TrieNode child;
+		for(char c: s.toLowerCase().toCharArray()) {
+			child = curr.getChild(c);
+			if (child == null) {
+				return false;
+			} else if (child.getText().equals(s.toLowerCase())) {
+				return true;
+			} else {
+				curr = child;
+			}
+		}
 		return false;
 	}
 
@@ -100,8 +138,41 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       If it is a word, add it to the completions list
     	 //       Add all of its child nodes to the back of the queue
     	 // Return the list of completions
-    	 
-         return null;
+    	List<String> completions = new LinkedList<String>();
+    	TrieNode curr = root;
+		TrieNode child;
+        Queue<TrieNode> queue = new LinkedList<TrieNode>();
+        
+        if (numCompletions == 0) {
+        	return completions;
+        }
+		
+		for(char c: prefix.toLowerCase().toCharArray()) {
+			child = curr.getChild(c);
+			if (child == null) {
+				return completions;
+			} else {
+				curr = child;
+			}
+		}
+		
+        queue.add(curr);
+        while (!queue.isEmpty()) { 
+        	TrieNode tempNode = queue.poll();
+        	
+        	if (tempNode.endsWord()) {
+        		completions.add(tempNode.getText());
+        	}
+        	
+        	if (completions.size() == numCompletions) {
+        		return completions;
+        	}
+
+        	for (char c: tempNode.getValidNextCharacters()) {
+        		queue.add(tempNode.getChild(c));
+        	}
+        }
+        return completions;
      }
 
  	// For debugging

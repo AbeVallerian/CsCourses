@@ -97,6 +97,8 @@ public class AutoCompleteDictionaryTrieTester {
 		emptyDict.addWord("hellow");
 		smallDict.addWord("hellow");
 		largeDict.addWord("hellow");
+		
+		
 
 		assertEquals("Asserting hellow is in empty dict", true, emptyDict.isWord("hellow"));
 		assertEquals("Asserting hellow is in small dict", true, smallDict.isWord("hellow"));
