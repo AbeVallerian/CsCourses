@@ -1,6 +1,4 @@
 # python3
-n, m = map(int, input().split())
-edges = [list(map(int, input().split())) for i in range(m)]
 
 
 # This solution prints a simple satisfiable formula
@@ -9,7 +7,10 @@ edges = [list(map(int, input().split())) for i in range(m)]
 def printEquisatisfiableSatFormula(n, edges):
     edges_dict = {}
     for item in edges:
-        edges_dict[(item[0], item[1])] = 0
+        if int(item[0]) < int(item[1]):
+            edges_dict[(item[0], item[1])] = 0
+        else:
+            edges_dict[(item[1], item[0])] = 0
 
     output_list = []
 
@@ -52,4 +53,8 @@ def printEquisatisfiableSatFormula(n, edges):
         print(text)
 
 
-printEquisatisfiableSatFormula(n, edges)
+if __name__ == "__main__":
+    n, m = map(int, input().split())
+    edges = [list(map(int, input().split())) for i in range(m)]
+
+    printEquisatisfiableSatFormula(n, edges)
